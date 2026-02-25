@@ -47,9 +47,17 @@ export const LoginUser=async(req,res)=>{
              return res.status(400).json({ message: "Password incorrect" });
         }
          const token = generateToken(user._id.toString());
-         return res.status(200).json({ token });
-
+        res.cookie("token",token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+     maxAge: 24 * 60 * 60 * 1000
+    })
+    
+// res.status(200).json({ message: "Login successful" });
+res.send({token})
     } catch (error) {
         res.json(error)
     }
 }
+
